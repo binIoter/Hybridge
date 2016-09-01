@@ -1,0 +1,94 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div>
+    <p>
+        <input type="text" id="text1" value="用户名(username)"/>
+    </p>
+    <p>
+        <input type="text" id="text2" value="password"/>
+    </p>
+    <p>
+        <input type="button" id="enter1" value="调用Native的toast方法" onclick="testClick1();"/>
+    </p>
+    <p>
+        <input type="button" id="enter2" value="调用Native打开新页面方法" onclick="testClick2();"/>
+    </p>
+    <p>
+        <input type="button" id="enter3" value="调用Native关闭页面方法" onclick="testClick3();"/>
+    </p>
+    <p>
+        <input type="button" id="enter4" value="调用Native设置rightButton" onclick="testClick4();"/>
+    </p>
+    <p>
+        <input type="button" id="enter5" value="调用Native设置title" onclick="testClick5();"/>
+    </p>
+    <p>
+        <input type="button" id="enter6" value="延时调用Native方法" onclick="testClick6();"/>
+    </p>
+    <p>
+        <input type="button" id="enter7" value="相对于交互的无效调用" onclick="testClick7();"/>
+    </p>
+</div>
+</body>
+<script>
+        function testClick1() {
+            var str1 = document.getElementById("text1").value;
+            var str2 = document.getElementById("text2").value;
+            var str=prompt(JSON.stringify({
+              lj_protocol: "jsbridge",
+              methodName: "toast",
+              param: "username"+str1+"password"+str2
+            }));
+        }
+        function testClick2() {
+            var str=prompt(JSON.stringify({
+              lj_protocol: "jsbridge",
+              methodName: "openNewPage",
+              param: "test2"
+            }));
+        }
+        function testClick3() {
+            var str=prompt(JSON.stringify({
+              lj_protocol: "jsbridge",
+              methodName: "finish",
+              param:"test3"
+            })
+            );
+        }
+        function testClick4() {
+            var str=prompt(JSON.stringify({
+              lj_protocol: "jsbridge",
+              methodName: "bar_RightTitle",
+              param:"test4"
+            })
+            );
+        }
+        function testClick5() {
+            var str=prompt(JSON.stringify({
+              lj_protocol: "jsbridge",
+              methodName: "bar_Title",
+              param:"test5"
+            })
+            );
+        }
+        function testClick6() {
+            var str=prompt(JSON.stringify({
+              lj_protocol: "jsbridge",
+              methodName: "delayToast",
+              param:"test6"
+            })
+            );
+        }
+
+        function testClick7() {
+            var str=prompt("invalid");
+        }
+
+
+</script>
+
+</html>

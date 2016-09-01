@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <com.binioter.hybridge.extra.TopTitleBar
+    android:id="@+id/title_bar"
+    style="@style/title_bar" />
+
+  <ProgressBar
+    android:id="@+id/webview_progress"
+    style="?android:attr/progressBarStyleHorizontal"
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:progressDrawable="@drawable/bg_web_loading"
+    android:visibility="gone" />
+
+  <RelativeLayout
+    android:id="@+id/root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:id="@+id/webview_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/webview_crash_tip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:drawablePadding="14dip"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="@string/net_error"
+        android:textColor="#FFC8C8C8"
+        android:textSize="14sp"
+        android:visibility="visible" />
+    </LinearLayout>
+
+
+  </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,26 @@
+<resources>
+
+  <!-- Base application theme. -->
+  <style name="AppTheme">
+    <!-- Customize your theme here. -->
+  </style>
+
+  <declare-styleable name="TopTitleBar">
+    <!-- 定义titlebar中间标题-->
+    <attr name="tb_title" format="reference" />
+    <!-- 定义titlebar背景色-->
+    <attr name="tb_background" format="color" />
+    <!-- 定义titlebar返回按钮图片-->
+    <attr name="tb_back_icon" format="reference" />
+    <!-- 定义titlebar返回按钮是否可见-->
+    <attr name="tb_back_icon_visible" format="boolean" />
+    <!-- 定义titlebar分割线是否可见-->
+    <attr name="tb_divider_visible" format="boolean" />
+  </declare-styleable>
+
+  <style name="title_bar">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/title_height</item>
+    <item name="android:background">@color/title_bar_color</item>
+  </style>
+</resources>

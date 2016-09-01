@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">hybridbridge</string>
+
+  <string name="hello_world">Hello world!</string>
+  <string name="action_settings">Settings</string>
+  <string name="net_error">当前没有可用网络</string>
+</resources>
