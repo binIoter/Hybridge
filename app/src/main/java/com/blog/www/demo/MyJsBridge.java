@@ -51,7 +51,7 @@ public class MyJsBridge extends CommonJsBridge {
           }, 3000);
           break;
         case "openNewPage":
-          BrowserUtil.startWebActivity(mContext, "https://m.taobao.com", MyWebViewActivity.class);
+          BrowserUtil.startWebActivity(mContext, "file:///android_asset/demo.html", MyWebViewActivity.class);
           break;
         case "finish":
           if (mContext instanceof Activity) {

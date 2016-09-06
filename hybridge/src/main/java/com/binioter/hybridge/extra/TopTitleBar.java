@@ -19,7 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by zb on 2016/7/28.
+ * 创建时间: 2016/08/30  <br>
+ * 作者: biIoter <br>
+ * 描述:统一titlebar
  */
 public class TopTitleBar extends LinearLayout implements View.OnClickListener {
 

@@ -170,7 +170,7 @@ public abstract class BaseWebViewActivity extends Activity implements Handler.Ca
     showProgressBar();
     //try {
     //url白名单校验
-    //  if( new URL(mUrl).getHost().equals("m.taobao.com")){
+    //  if( new URL(mUrl).getHost().equals("m.github.io")){
     //    loadUrl(mUrl);
     //  }
     //} catch (MalformedURLException e) {

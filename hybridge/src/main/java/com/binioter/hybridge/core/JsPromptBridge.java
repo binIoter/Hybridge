@@ -13,8 +13,8 @@ import org.json.JSONObject;
  */
 public class JsPromptBridge {
   //js与native交互的标识，用于过滤非法调用
-  //推荐使用公司名或缩写作为前缀 eg:lj_protocol
-  private static final String KEY_PROTOCOL = "lj_protocol";
+  //推荐使用公司名或缩写作为前缀 eg:bd_protocol
+  private static final String KEY_PROTOCOL = "bd_protocol";
   private static final String KEY_METHOD_NAME = "methodName";
   private static final String KEY_PARAM = "param";
   private ArrayList<JsPromptInterface> jsInterfaceList = new ArrayList<JsPromptInterface>();
