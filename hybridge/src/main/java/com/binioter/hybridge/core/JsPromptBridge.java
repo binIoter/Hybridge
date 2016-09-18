@@ -2,6 +2,7 @@ package com.binioter.hybridge.core;
 
 import android.text.TextUtils;
 import android.webkit.JsPromptResult;
+import com.binioter.hybridge.extra.ProtocolBean;
 import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,11 +13,13 @@ import org.json.JSONObject;
  * 描述:解析js传过来的数据
  */
 public class JsPromptBridge {
-  //js与native交互的标识，用于过滤非法调用
-  //推荐使用公司名或缩写作为前缀 eg:bd_protocol
-  private static final String KEY_PROTOCOL = "bd_protocol";
-  private static final String KEY_METHOD_NAME = "methodName";
-  private static final String KEY_PARAM = "param";
+
+  private ProtocolBean mProtocolBean;
+
+  public JsPromptBridge(ProtocolBean protocolBean) {
+    this.mProtocolBean = protocolBean;
+  }
+
   private ArrayList<JsPromptInterface> jsInterfaceList = new ArrayList<JsPromptInterface>();
 
   public void addJSPromptInterface(JsPromptInterface jsInterface) {
@@ -36,14 +39,14 @@ public class JsPromptBridge {
   }
 
   public boolean parseJSON(String json, JsPromptResult result) {
-    if (TextUtils.isEmpty(json)) {
+    if (TextUtils.isEmpty(json) || mProtocolBean == null) {
       return false;
     }
     try {
       JSONObject obj = new JSONObject(json);
-      String methodName = obj.optString(KEY_METHOD_NAME);
-      String params = obj.optString(KEY_PARAM);
-      if (!obj.has(KEY_PROTOCOL) || TextUtils.isEmpty(methodName) ||
+      String methodName = obj.optString(mProtocolBean.getMethodName());
+      String params = obj.optString(mProtocolBean.getParam());
+      if (!obj.has(mProtocolBean.getProtocol()) || TextUtils.isEmpty(methodName) ||
           TextUtils.isEmpty(params)) {
         //调用格式非法，hybridge不处理此调用
         return false;

@@ -163,26 +163,6 @@ public abstract class BaseWebViewActivity extends Activity implements Handler.Ca
   /**
    * 刷新WebView，重新加载数据
    */
-  public void refresh() {
-    hideCrashTip();
-    //加载本地测试使用
-    //if (URLUtil.isNetworkUrl(mUrl)) {
-    showProgressBar();
-    //try {
-    //url白名单校验
-    //  if( new URL(mUrl).getHost().equals("m.github.io")){
-    //    loadUrl(mUrl);
-    //  }
-    //} catch (MalformedURLException e) {
-    //  e.printStackTrace();
-    //}
-    loadUrl(mUrl);
-    //}
-  }
-
-  /**
-   * 刷新WebView，重新加载数据
-   */
   public void refreshIgnoreFormat() {
     hideCrashTip();
     showProgressBar();
@@ -222,52 +202,56 @@ public abstract class BaseWebViewActivity extends Activity implements Handler.Ca
    *
    * @return WebView
    */
-  public abstract View createWebView();
+  protected abstract View createWebView();
 
-  public abstract View getWebView();
+  protected abstract View getWebView();
 
-  public abstract void addJavascriptInterface(Object obj, String interfaceName);
+  protected abstract void addJavascriptInterface(Object obj, String interfaceName);
 
-  public abstract void initWebView();
+  protected abstract void initWebView();
 
-  public abstract void loadUrl(String url);
+  protected abstract void loadUrl(String url);
 
-  public abstract void webViewDestory();
+  protected abstract void webViewDestory();
 
-  public abstract boolean webViewGoBack();
+  protected abstract boolean webViewGoBack();
 
-  public abstract void initCookie();
+  protected abstract void initCookie();
+  protected abstract boolean isNeedUpdateCookie();
 
-  public abstract void onReceivedError(int errorCode);
+  protected abstract void refresh();
 
-  public void showProgressBar() {
+  protected abstract void onReceivedError(int errorCode);
+
+  protected void showProgressBar() {
     mView.showProgressBar();
   }
 
-  public void hideProgressBar() {
+  protected void hideProgressBar() {
     mView.hideProgressBar();
   }
 
-  public void showCrashTip() {
+  protected void showCrashTip() {
     mView.showCrashTip();
   }
 
-  public void hideCrashTip() {
+  protected void hideCrashTip() {
     mView.hideCrashTip();
   }
 
-  public void hideNoDataView() {
+  protected void hideNoDataView() {
     mView.hideNoDataView();
   }
 
-  public void showNoDataView() {
+  protected void showNoDataView() {
     mView.showNoDataView();
   }
 
   /**
    * 给WebView增加js interface，供FE调用
    */
-  @android.webkit.JavascriptInterface protected void addJavascriptInterface() {
+  @android.webkit.JavascriptInterface protected void addJavascriptInterface(
+      final ProtocolBean protocolBean) {
     if (mJsInterfaces == null) {
       mJsInterfaces = new HashMap<String, JavascriptInterface>();
     }
@@ -276,7 +260,7 @@ public abstract class BaseWebViewActivity extends Activity implements Handler.Ca
       mJsInterfaces.put("CommonJsBridge", new JavascriptInterface() {
 
         @Override public Object createJsInterface(Context context) {
-          return new JsPromptBridge();
+          return new JsPromptBridge(protocolBean);
         }
       });
     }
@@ -290,13 +274,7 @@ public abstract class BaseWebViewActivity extends Activity implements Handler.Ca
     }
   }
 
-  /**
-   * 是否需要更新cookie
-   */
-  private boolean isNeedUpdateCookie() {
-    // TODO: 16/9/1 根据自身业务逻辑处理cookie更新情况
-    return mIsUpdateCookie;
-  }
+
 
   public interface JavascriptInterface {
 

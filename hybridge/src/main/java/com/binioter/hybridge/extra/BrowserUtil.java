@@ -36,10 +36,5 @@ public class BrowserUtil {
     }
   }
 
-  /**
-   * 初始化Cookie，主要是在WebView中用到
-   */
-  public static void initCookie(Context context) {
-    //// TODO: 16/8/30 初始化cookie
-  }
+
 }

@@ -1,5 +1,6 @@
 package com.blog.www.demo;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.webkit.DownloadListener;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
+import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
@@ -23,8 +25,10 @@ import com.binioter.hybridge.core.JsPromptBridge;
 import com.binioter.hybridge.core.JsPromptInterface;
 import com.binioter.hybridge.core.OnJsPromptCallback;
 import com.binioter.hybridge.extra.BaseWebViewActivity;
-import com.binioter.hybridge.extra.BrowserUtil;
+import com.binioter.hybridge.extra.ProtocolBean;
 import com.binioter.hybridge.extra.Utils;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * 创建时间: 2016/08/02  <br>
@@ -32,9 +36,13 @@ import com.binioter.hybridge.extra.Utils;
  * 描述: 通用WebActivity，支持设置cookie、自定义javascript interface
  */
 public class MyWebViewActivity extends BaseWebViewActivity {
-
+  private static final String KEY_PROTOCOL = "bd_protocol";
+  private static final String KEY_METHOD_NAME = "methodName";
+  private static final String KEY_PARAM = "param";
+  private static final String SHOST = "m.github.io";
   protected BaseWebView mWebView = null;
-
+  private static final ProtocolBean protocolBean =
+      new ProtocolBean(KEY_PROTOCOL, KEY_METHOD_NAME, KEY_PARAM);
   private JsPromptBridge jsBridge;
 
   private OnJsPromptCallback jsCallback = new OnJsPromptCallback() {
@@ -49,7 +57,7 @@ public class MyWebViewActivity extends BaseWebViewActivity {
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    jsBridge = new JsPromptBridge();
+    jsBridge = new JsPromptBridge(protocolBean);
     jsBridge.addJSPromptInterface(new MyJsBridge(this));
     //可以根据不同业务或者模块addJSPromptInterface，这样方便团队分开开发
     //jsBridge.addJSPromptInterface(new MyJsBridge2(this));
@@ -115,13 +123,14 @@ public class MyWebViewActivity extends BaseWebViewActivity {
       mWebView.setWebChromeClient(client);
       // 增加javascript接口的支持
       if (mEnableJs) {
-        addJavascriptInterface();
+        addJavascriptInterface(protocolBean);
       }
     }
     return mWebView;
   }
 
-  @Override public void addJavascriptInterface(Object obj, String interfaceName) {
+  @SuppressLint("JavascriptInterface") @Override
+  public void addJavascriptInterface(Object obj, String interfaceName) {
     if (mWebView != null) {
       mWebView.addJavascriptInterface(obj, interfaceName);
     }
@@ -134,6 +143,25 @@ public class MyWebViewActivity extends BaseWebViewActivity {
   @Override public void loadUrl(String url) {
     if (mWebView != null) {
       mWebView.loadUrl(url);
+    }
+  }
+
+  /**
+   * 刷新WebView，重新加载数据
+   */
+  protected void refresh() {
+    hideCrashTip();
+    if (URLUtil.isNetworkUrl(mUrl)) {
+      showProgressBar();
+      try {
+        //url白名单校验
+        if (new URL(mUrl).getHost().equals(SHOST)) {
+          loadUrl(mUrl);
+        }
+      } catch (MalformedURLException e) {
+        e.printStackTrace();
+      }
+      loadUrl(mUrl);//如果运行demo请将除了本行代码注释掉
     }
   }
 
@@ -159,7 +187,7 @@ public class MyWebViewActivity extends BaseWebViewActivity {
   }
 
   @Override public void initCookie() {
-    BrowserUtil.initCookie(getApplicationContext());
+    // TODO: 16/8/30 初始化cookie
   }
 
   @Override public void onReceivedError(int errorCode) {
@@ -180,6 +208,14 @@ public class MyWebViewActivity extends BaseWebViewActivity {
       super.unregisterReceiver(receiver);
     } catch (Throwable e) {
     }
+  }
+
+  /**
+   * 是否需要更新cookie
+   */
+  protected boolean isNeedUpdateCookie() {
+    // TODO: 16/9/1 根据自身业务逻辑处理cookie更新情况
+    return mIsUpdateCookie;
   }
 
   private static class MyWebChromeClient extends WebChromeClient {
@@ -253,7 +289,7 @@ public class MyWebViewActivity extends BaseWebViewActivity {
         mUrlTitle = mWebView.getTitle();
       }
       mView.setProgressbarSize();
-     // hideProgressBar();
+      // hideProgressBar();
     }
 
     @Override public void onReceivedError(WebView view, int errorCode, String description,
@@ -275,7 +311,7 @@ public class MyWebViewActivity extends BaseWebViewActivity {
       }
       mUrl = url;
       mView.startLoading();
-    //  showProgressBar();
+      //  showProgressBar();
     }
 
     @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
